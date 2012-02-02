@@ -60,6 +60,11 @@ collectCallQueue = new JoelPurra.CollectCalls(collectCallQueue);
 // Then invoke the entire queue in the order the functions were added.
 // This is only necessary to do once per queue.
 collectCallQueue.join();
+
+// Pass true as the second argument, and the queue will be
+// invoked right away without calling .join()
+// This can only be done once per queue.
+collectCallQueue = new JoelPurra.CollectCalls(collectCallQueue, true);
 ```
 
 ## Dependencies
