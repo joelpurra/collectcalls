@@ -4,11 +4,6 @@
 /*jslint vars: true, white: true, maxlen: 120*/
 /*global JoelPurra, module, test, ok, strictEqual, notStrictEqual*/
 
-String.prototype.withReadableLinebreaks = function ()
-{
-	return this.replace(/\n/g, "\\n");
-};
-
 (function ()
 {
 	"use strict";
