@@ -55,7 +55,7 @@ var JoelPurra = JoelPurra || {};
 	// Public CollectCalls functions
 	namespace.CollectCalls = function (queue, ready)
 	{
-		this.queue = queue;
+		this.queue = (queue !== undefined ? queue.concat() : []);
 		this.ready = (ready === true);
 		this.handleQueue();
 
