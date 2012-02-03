@@ -11,9 +11,46 @@
 // Set up namespace, if needed
 var JoelPurra = JoelPurra || {};
 
-(function (namespace)
+(function (global, namespace)
 {
 	"use strict";
+
+	function bindCall(context, fnc)
+	{
+		return function ()
+		{
+			var args = Array.prototype.slice.call(arguments);
+
+			fnc.call(context, args);
+		};
+	}
+
+	function noop()
+	{
+	}
+
+	function getErrorLogger()
+	{
+		var logger = noop;
+		var context = null;
+
+		if (global.console)
+		{
+			if (global.console.error
+				|| global.console.log)
+			{
+				logger = global.console.error || global.console.log;
+				context = global.console;
+			}
+		}
+
+		return bindCall(context, logger);
+	}
+
+	function logError()
+	{
+		return getErrorLogger();
+	}
 
 	// Public CollectCalls functions
 	namespace.CollectCalls = function (queue, ready)
@@ -46,7 +83,7 @@ var JoelPurra = JoelPurra || {};
 		}
 		catch (handleOneError)
 		{
-			// TODO: don't hide errors
+			logError()(handleOneError);
 		}
 	};
 
@@ -63,4 +100,4 @@ var JoelPurra = JoelPurra || {};
 		}
 	};
 
-} (JoelPurra));
+} (this, JoelPurra));
