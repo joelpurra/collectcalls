@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>CollectCalls demo</title>
+</head>
+<body>
+	<h1>
+		<a href="https://github.com/joelpurra/collectcalls">CollectCalls</a> demo</h1>
+	<p>
+		This page demonstrates, in a blunt way, how scripts can block load/execution. There
+		are two <code>alert()</code> boxes shown - one blocking and one non-blocking. Both
+		of them are initialized in the middle of the page's contents. Using CollectCalls,
+		the <code>alert()</code> can be deferred until the rest of the page and jQuery has
+		been loaded.
+	</p>
+	<ol>
+		<li><a href="demo.html">Reload and do not show any alert box.</a></li>
+		<li><a href="demo.html?show-alert=blocking">Reload and show blocking alert box without
+			CollectCalls.</a></li>
+		<li><a href="demo.html?show-alert=non-blocking">Reload and show non-blocking alert box
+			using CollectCalls.</a></li>
+		<li><a href="demo.html?show-alert=blocking&show-alert=non-blocking">Reload and show
+			both blocking and non-blocking alert box.</a></li>
+	</ol>
+	<h2>
+		First half of the page has loaded
+	</h2>
+	<p>
+		Some content before both inline scripts.
+	</p>
+	<!-- Code that is written to the HTML now, but needs to be executed later -->
+	<!-- This can be anywhere on the page, even after CollectCalls(...), and multiple times -->
+	<script>
+//<![CDATA[
+
+		if (document.location.toString().indexOf("show-alert=non-blocking") !== -1)
+		{
+			// Set up, or reuse, a queue built as an array object
+			var runWithJQuery = runWithJQuery || [];
+
+			runWithJQuery.push(function ()
+			{
+				// Do some heavy lifting with jQuery
+				var scriptCount = $("script").length;
+
+				// Then show alert box - it won't block the page load, since it's already done
+				var msg = "jQuery has loaded, the page is ready and the queue is invoked." + "\n\n"
+			+ "Found " + scriptCount + " script tags on the page, using jQuery " + $.fn.jquery + ".";
+				alert(msg);
+			});
+		}
+
+//]]>
+	</script>
+	<!-- This is the counter example  -->
+	<script>
+//<![CDATA[
+
+		// This is bad code, do not copy
+		if (document.location.toString().indexOf("show-alert=blocking") !== -1)
+		{
+			alert("This alert is an example of script tags blocking execution.\n\nHalf of the page is not visible yet and jQuery cannot be accessed.");
+		}
+
+//]]>
+	</script>
+	<h2>
+		Second half of the page has loaded
+	</h2>
+	<p>
+		Some content after both inline scripts.
+	</p>
+	<p>
+		The end.
+	</p>
+	<!-- Load jQuery (and plugins) at the end of the page for efficiency -->
+	<script src="http://code.jquery.com/jquery-latest.js"></script>
+	<!-- Load collectcalls.joelpurra.js at any point before calling JoelPurra.CollectCalls(...) -->
+	<script src="https://raw.github.com/joelpurra/collectcalls/master/src/collectcalls.joelpurra.js"></script>
+	<script>
+//<![CDATA[
+
+		// This code won't be executed until jQuery has been loaded.
+		$(function ()
+		{
+			// Wrap the queue with CollectCalls
+			runWithJQuery = new JoelPurra.CollectCalls(runWithJQuery);
+
+			// Invoke the entire queue in the order the functions were added
+			runWithJQuery.join();
+		});
+
+//]]>
+	</script>
+</body>
+</html>
