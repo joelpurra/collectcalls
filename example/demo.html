@@ -5,14 +5,27 @@
 </head>
 <body>
 	<h1>
-		<a href="https://github.com/joelpurra/collectcalls">CollectCalls</a> demo</h1>
+		<a href="https://github.com/joelpurra/collectcalls">CollectCalls</a> demo
+	</h1>
 	<p>
-		This page demonstrates, in a blunt way, how scripts can block load/execution. There
-		are two <code>alert()</code> boxes shown - one blocking and one non-blocking. Both
-		of them are initialized in the middle of the page's contents. Using CollectCalls,
-		the <code>alert()</code> can be deferred until the rest of the page and jQuery has
-		been loaded.
+		This page demonstrates, in a blunt way, how scripts can block load/execution/display
+		of other content/scripts/stylesheets/images on the page. There are two <code>alert()</code>
+		boxes shown - one blocking and one non-blocking. Both of them are initialized in
+		the middle of the page's contents, between the "first half" and the "second half".
+		Using CollectCalls, the <code>alert()</code> can be deferred until the rest of the
+		page and jQuery has been loaded.
 	</p>
+	<p>
+		In case you wonder why jQuery and CollectCalls are not loaded at the top of the
+		page, it is because it is <a href="http://code.google.com/speed/page-speed/docs/payload.html#DeferLoadingJS">
+			best practice to load scripts at the bottom of the page</a>, near <code>&lt;/body&gt;</code>.
+		There are also other techniques/optimizations/combinations that make it hard to
+		predict exactly when a script has loaded and executed, but CollectCalls can help
+		manage all of them.
+	</p>
+	<h2>
+		Demo modes
+	</h2>
 	<ol>
 		<li><a href="demo.html">Reload and do not show any alert box.</a></li>
 		<li><a href="demo.html?show-alert=blocking">Reload and show blocking alert box without
@@ -26,7 +39,10 @@
 		First half of the page has loaded
 	</h2>
 	<p>
-		Some content before both inline scripts.
+		Some content <em>above</em> both inline script blocks. If you have chosen to see
+		the blocking <code>alert()</code>, you can see how this demonstrates that some scripts
+		are better to execute <em>after</em> the page/all scripts (or just the right scripts)
+		have loaded.
 	</p>
 	<!-- Code that is written to the HTML now, but needs to be executed later -->
 	<!-- This can be anywhere on the page, even after CollectCalls(...), and multiple times -->
@@ -61,7 +77,7 @@
 		// This is bad code, do not copy
 		if (document.location.toString().indexOf("show-alert=blocking") !== -1)
 		{
-			alert("This alert is an example of script tags blocking execution.\n\nHalf of the page is not visible yet and jQuery cannot be accessed.");
+			alert("This alert is an example of script tags blocking execution.\n\nHalf of the page is not visible yet, and jQuery cannot be accessed.");
 		}
 
 //]]>
@@ -70,10 +86,18 @@
 		Second half of the page has loaded
 	</h2>
 	<p>
-		Some content after both inline scripts.
+		Some content <em>below</em> both inline script blocks. If you have chosen to use
+		CollectCalls to show the non-blocking <code>alert()</code>, you can see that the
+		entire page has loaded before it is popping up - even though the inline script using
+		jQuery was defined <em>above</em> this paragraph.
 	</p>
+	<h2>
+		End of page
+	</h2>
 	<p>
-		The end.
+		The javascript libraries <a href="http://code.jquery.com/jquery-latest.js">jquery-latest.js</a>
+		and <a href="https://raw.github.com/joelpurra/collectcalls/master/src/collectcalls.joelpurra.js">
+			collectcalls.joelpurra.js</a> are loaded <em>below</em> this paragraph.
 	</p>
 	<!-- Load jQuery (and plugins) at the end of the page for efficiency -->
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
