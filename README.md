@@ -1,4 +1,4 @@
-# CollectCalls javascript library.
+# [CollectCalls](http://joelpurra.github.com/collectcalls) javascript library.
 Collects `function () { }` blocks that should be called in the future. The script `collectcalls.joelpurra.js` does not need to load until the future is nigh.
 
 While executing an inline script, it might have pending dependencies that prevents it from completing right away. CollectCalls can collect functions and call them at a later time, when the time is right.
