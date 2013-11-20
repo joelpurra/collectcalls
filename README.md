@@ -108,3 +108,7 @@ All rights reserved.
 
 When using CollectCalls, comply to at least one of the three available licenses: BSD, MIT, GPL.
 Please see the LICENSE file for details.
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/joelpurra/collectcalls/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
