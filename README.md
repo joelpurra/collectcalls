@@ -103,7 +103,7 @@ CollectCalls does not have any dependencies.
 Should be compatible with all javascript-enabled browsers. You are encouraged to [run the CollectCalls test suite](http://joelpurra.github.com/collectcalls/test/) and then report any issues.
 
 ## License
-Copyright (c) 2010, 2011, 2012, Joel Purra <http://joelpurra.se/>
+Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, Joel Purra <http://joelpurra.se/>
 All rights reserved.
 
 When using CollectCalls, comply to at least one of the three available licenses: BSD, MIT, GPL.
