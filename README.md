@@ -52,7 +52,7 @@ jQuery is loaded at the bottom of the page for efficiency, but `<script>` tags a
 </script>
 
 <!-- Load jQuery (and plugins) at the end of the page for efficiency -->
-<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="https://code.jquery.com/jquery-latest.js"></script>
 
 <!-- Load collectcalls.joelpurra.js at any point before calling JoelPurra.CollectCalls(...) -->
 <script src="https://raw.github.com/joelpurra/collectcalls/master/src/collectcalls.joelpurra.js"></script>
