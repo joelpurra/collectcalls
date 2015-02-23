@@ -15,6 +15,38 @@ var JoelPurra = JoelPurra || {};
 {
 	"use strict";
 
+	// Code Contract style subset
+	function ContractError(msg) {
+		this.name = "ContractError";
+		var defaultMessage = "A contract was broken.";
+		this.msg = defaultMessage + (msg !== undefined ? " " + msg : "");
+	}
+	ContractError.prototype = new Error();
+	ContractError.prototype.constructor = ContractError;
+
+	var Contract = {
+		// Private functions
+		inner:
+		{
+			 isFunction: function (fnc)
+			{
+				return (typeof (fnc) === 'function');
+			}
+		},
+		// Public functions
+		Fail: function (msg)
+		{
+			throw new ContractError(msg);
+		},
+		RequireFunction: function (fnc)
+		{
+			if (!Contract.inner.isFunction(fnc))
+			{
+				Contract.Fail("Not a function: " + fnc + ".");
+			}
+		}
+	};
+
 	// Public CollectCalls functions
 	namespace.CollectCalls = function (queue, ready)
 	{
@@ -33,6 +65,8 @@ var JoelPurra = JoelPurra || {};
 
 	namespace.CollectCalls.prototype.push = function (fnc)
 	{
+		Contract.RequireFunction(fnc);
+
 		this.queue.push(fnc);
 		this.handleQueue();
 	};
@@ -42,6 +76,8 @@ var JoelPurra = JoelPurra || {};
 	{
 		try
 		{
+			Contract.RequireFunction(fnc);
+
 			fnc.call(null);
 		}
 		catch (handleOneError)

@@ -229,25 +229,25 @@
 			strictEqual(counter, 0);
 
 			result.push(fncIncrement);
-			
+
 			strictEqual(queue.length, 2);
 			strictEqual(result.queue.length, 2);
 			strictEqual(counter, 0);
 
 			result.join();
-			
+
 			strictEqual(queue.length, 2);
 			strictEqual(result.queue.length, 0);
 			strictEqual(counter, 2);
 
 			queue.push(fncIncrement);
-			
+
 			strictEqual(queue.length, 3);
 			strictEqual(result.queue.length, 0);
 			strictEqual(counter, 2);
 
 			result.push(fncIncrement);
-			
+
 			strictEqual(queue.length, 3);
 			strictEqual(result.queue.length, 0);
 			strictEqual(counter, 3);
@@ -307,7 +307,7 @@
 			strictEqual(counter, 6);
 		});
 
-		test("Can add non-functions", 10, function ()
+		test("Can add non-functions", 12, function ()
 		{
 			var counter = 0;
 
@@ -333,10 +333,10 @@
 			strictEqual(counter, 0);
 
 			result.push(fncIncrement);
-			result.push(notAFunction);
+			raises(function () { result.push(notAFunction) }, Error, "Did not get expected ContractError");
 			result.push(fncIncrement);
 
-			strictEqual(result.queue.length, 6);
+			strictEqual(result.queue.length, 5);
 			strictEqual(counter, 0);
 
 			result.join();
@@ -345,7 +345,7 @@
 			strictEqual(counter, 4);
 
 			result.push(fncIncrement);
-			result.push(notAFunction);
+			raises(function () { result.push(notAFunction) }, Error, "Did not get expected ContractError");
 			result.push(fncIncrement);
 
 			strictEqual(result.queue.length, 0);
