@@ -129,5 +129,5 @@ Should be compatible with all javascript-enabled browsers. You are encouraged to
 
 ---
 
-[CollectCalls](https://joelpurra.com/projects/collectcalls/) copyright &copy; 2010, 2011, 2012, 2013, 2014, 2015, [Joel Purra](https://joelpurra.com/). All rights reserved. When using CollectCalls, comply to at least one of the three available licenses: BSD, MIT, GPL.
+[CollectCalls](https://joelpurra.com/projects/collectcalls/) copyright &copy; 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, [Joel Purra](https://joelpurra.com/). All rights reserved. When using CollectCalls, comply to at least one of the three available licenses: BSD, MIT, GPL.
 Please see the LICENSE file for details.
