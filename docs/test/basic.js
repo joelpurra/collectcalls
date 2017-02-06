@@ -4,352 +4,364 @@
 /*jslint vars: true, white: true, maxlen: 120*/
 /*global JoelPurra, module, test, ok, strictEqual, notStrictEqual*/
 
-(function ()
+(function()
 {
-	"use strict";
+    "use strict";
 
-	(function ()
-	{
-		module("Class");
+    (function()
+    {
+        module("Class");
 
-		test("Class exists", 4, function ()
-		{
-			notStrictEqual(typeof (JoelPurra.CollectCalls), "undefined", "Is undefined.");
-			strictEqual(typeof (JoelPurra.CollectCalls), "function", "Not a function.");
-			strictEqual(typeof (new JoelPurra.CollectCalls()), "object", "Not an object.");
-			ok((new JoelPurra.CollectCalls()) instanceof (JoelPurra.CollectCalls), "Not an instance of itself.");
-		});
+        test("Class exists", 4, function()
+        {
+            notStrictEqual(typeof (JoelPurra.CollectCalls), "undefined", "Is undefined.");
+            strictEqual(typeof (JoelPurra.CollectCalls), "function", "Not a function.");
+            strictEqual(typeof (new JoelPurra.CollectCalls()), "object", "Not an object.");
+            ok((new JoelPurra.CollectCalls()) instanceof (JoelPurra.CollectCalls), "Not an instance of itself.");
+        });
+    }());
 
-	} ());
+    (function()
+    {
+        module("Constructor");
 
-	(function ()
-	{
-		module("Constructor");
+        test("Constructor accepts zero arguments", 1, function()
+        {
+            var result = new JoelPurra.CollectCalls();
 
-		test("Constructor accepts zero arguments", 1, function ()
-		{
-			var result = new JoelPurra.CollectCalls();
+            strictEqual(result.queue.length, 0);
 
-			strictEqual(result.queue.length, 0);
+            result.join();
+        });
 
-			result.join();
-		});
+        test("Constructor accepts empty queue", 1, function()
+        {
+            var queue = [],
+                result = new JoelPurra.CollectCalls(queue);
 
-		test("Constructor accepts empty queue", 1, function ()
-		{
-			var queue = [];
-			var result = new JoelPurra.CollectCalls(queue);
+            strictEqual(result.queue.length, 0);
 
-			strictEqual(result.queue.length, 0);
+            result.join();
+        });
 
-			result.join();
-		});
+        test("Constructor accepts two arguments and does not start", 5, function()
+        {
+            function fncChange()
+            {
+                change = "has changed";
+            }
 
-		test("Constructor accepts two arguments and does not start", 5, function ()
-		{
-			var change = "has not changed";
+            var change = "has not changed",
+                queue = null,
+                result = null;
 
-			function fncChange()
-			{
-				change = "has changed";
-			}
+            queue = [];
 
-			var queue = [];
+            queue.push(fncChange);
 
-			queue.push(fncChange);
+            strictEqual(queue.length, 1);
 
-			strictEqual(queue.length, 1);
+            result = new JoelPurra.CollectCalls(queue, false);
 
-			var result = new JoelPurra.CollectCalls(queue, false);
+            strictEqual(result.queue.length, 1);
+            strictEqual(change, "has not changed");
 
-			strictEqual(result.queue.length, 1);
-			strictEqual(change, "has not changed");
+            result.join();
 
-			result.join();
+            strictEqual(result.queue.length, 0);
+            strictEqual(change, "has changed");
+        });
 
-			strictEqual(result.queue.length, 0);
-			strictEqual(change, "has changed");
-		});
+        test("Constructor accepts two arguments and starts", 5, function()
+        {
+            function fncChange()
+            {
+                change = "has changed";
+            }
 
-		test("Constructor accepts two arguments and starts", 5, function ()
-		{
-			var change = "has not changed";
+            var change = "has not changed",
+                queue = null,
+                result = null;
 
-			function fncChange()
-			{
-				change = "has changed";
-			}
+            queue = [];
 
-			var queue = [];
+            queue.push(fncChange);
 
-			queue.push(fncChange);
+            strictEqual(queue.length, 1);
 
-			strictEqual(queue.length, 1);
+            result = new JoelPurra.CollectCalls(queue, true);
 
-			var result = new JoelPurra.CollectCalls(queue, true);
+            strictEqual(result.queue.length, 0);
+            strictEqual(change, "has changed");
 
-			strictEqual(result.queue.length, 0);
-			strictEqual(change, "has changed");
+            result.join();
 
-			result.join();
+            strictEqual(result.queue.length, 0);
+            strictEqual(change, "has changed");
+        });
+    }());
 
-			strictEqual(result.queue.length, 0);
-			strictEqual(change, "has changed");
-		});
+    (function()
+    {
+        module("Queue");
 
-	} ());
+        test("Can run one function twice", 6, function()
+        {
+            function fncIncrement()
+            {
+                counter += 1;
+            }
 
-	(function ()
-	{
-		module("Queue");
+            var counter = 0,
+                queue = null,
+                result = null;
 
-		test("Can run one function twice", 6, function ()
-		{
-			var counter = 0;
+            queue = [];
 
-			function fncIncrement()
-			{
-				counter += 1;
-			}
+            queue.push(fncIncrement);
+            queue.push(fncIncrement);
 
-			var queue = [];
+            strictEqual(queue.length, 2);
+            strictEqual(counter, 0);
 
-			queue.push(fncIncrement);
-			queue.push(fncIncrement);
+            result = new JoelPurra.CollectCalls(queue);
 
-			strictEqual(queue.length, 2);
-			strictEqual(counter, 0);
+            strictEqual(result.queue.length, 2);
+            strictEqual(counter, 0);
 
-			var result = new JoelPurra.CollectCalls(queue);
+            result.join();
 
-			strictEqual(result.queue.length, 2);
-			strictEqual(counter, 0);
+            strictEqual(result.queue.length, 0);
+            strictEqual(counter, 2);
+        });
 
-			result.join();
+        test("Can run one function twice, before and after constructor", 8, function()
+        {
+            function fncIncrement()
+            {
+                counter += 1;
+            }
 
-			strictEqual(result.queue.length, 0);
-			strictEqual(counter, 2);
-		});
+            var counter = 0,
+                queue = null,
+                result = null;
 
-		test("Can run one function twice, before and after constructor", 8, function ()
-		{
-			var counter = 0;
+            queue = [];
 
-			function fncIncrement()
-			{
-				counter += 1;
-			}
+            queue.push(fncIncrement);
 
-			var queue = [];
+            strictEqual(queue.length, 1);
+            strictEqual(counter, 0);
 
-			queue.push(fncIncrement);
+            result = new JoelPurra.CollectCalls(queue);
 
-			strictEqual(queue.length, 1);
-			strictEqual(counter, 0);
+            strictEqual(result.queue.length, 1);
+            strictEqual(counter, 0);
 
-			var result = new JoelPurra.CollectCalls(queue);
+            result.push(fncIncrement);
 
-			strictEqual(result.queue.length, 1);
-			strictEqual(counter, 0);
+            strictEqual(result.queue.length, 2);
+            strictEqual(counter, 0);
 
-			result.push(fncIncrement);
+            result.join();
 
-			strictEqual(result.queue.length, 2);
-			strictEqual(counter, 0);
+            strictEqual(result.queue.length, 0);
+            strictEqual(counter, 2);
+        });
 
-			result.join();
+        test("Can run one function thrice, before and after constructor and after join", 10, function()
+        {
+            function fncIncrement()
+            {
+                counter += 1;
+            }
 
-			strictEqual(result.queue.length, 0);
-			strictEqual(counter, 2);
-		});
+            var counter = 0,
+                queue = null,
+                result = null;
 
-		test("Can run one function thrice, before and after constructor and after join", 10, function ()
-		{
-			var counter = 0;
+            queue = [];
 
-			function fncIncrement()
-			{
-				counter += 1;
-			}
+            queue.push(fncIncrement);
 
-			var queue = [];
+            strictEqual(queue.length, 1);
+            strictEqual(counter, 0);
 
-			queue.push(fncIncrement);
+            result = new JoelPurra.CollectCalls(queue);
 
-			strictEqual(queue.length, 1);
-			strictEqual(counter, 0);
+            strictEqual(result.queue.length, 1);
+            strictEqual(counter, 0);
 
-			var result = new JoelPurra.CollectCalls(queue);
+            result.push(fncIncrement);
 
-			strictEqual(result.queue.length, 1);
-			strictEqual(counter, 0);
+            strictEqual(result.queue.length, 2);
+            strictEqual(counter, 0);
 
-			result.push(fncIncrement);
+            result.join();
 
-			strictEqual(result.queue.length, 2);
-			strictEqual(counter, 0);
+            strictEqual(result.queue.length, 0);
+            strictEqual(counter, 2);
 
-			result.join();
+            result.push(fncIncrement);
 
-			strictEqual(result.queue.length, 0);
-			strictEqual(counter, 2);
+            strictEqual(result.queue.length, 0);
+            strictEqual(counter, 3);
+        });
 
-			result.push(fncIncrement);
+        test("Constructor copies original queue", 20, function()
+        {
+            function fncIncrement()
+            {
+                counter += 1;
+            }
 
-			strictEqual(result.queue.length, 0);
-			strictEqual(counter, 3);
-		});
+            var counter = 0,
+                queue = null,
+                result = null;
 
-		test("Constructor copies original queue", 20, function ()
-		{
-			var counter = 0;
+            queue = [];
 
-			function fncIncrement()
-			{
-				counter += 1;
-			}
+            queue.push(fncIncrement);
 
-			var queue = [];
+            strictEqual(queue.length, 1);
+            strictEqual(counter, 0);
 
-			queue.push(fncIncrement);
+            result = new JoelPurra.CollectCalls(queue);
 
-			strictEqual(queue.length, 1);
-			strictEqual(counter, 0);
+            strictEqual(queue.length, 1);
+            strictEqual(result.queue.length, 1);
+            strictEqual(counter, 0);
 
-			var result = new JoelPurra.CollectCalls(queue);
+            queue.push(fncIncrement);
 
-			strictEqual(queue.length, 1);
-			strictEqual(result.queue.length, 1);
-			strictEqual(counter, 0);
+            strictEqual(queue.length, 2);
+            strictEqual(result.queue.length, 1);
+            strictEqual(counter, 0);
 
-			queue.push(fncIncrement);
+            result.push(fncIncrement);
 
-			strictEqual(queue.length, 2);
-			strictEqual(result.queue.length, 1);
-			strictEqual(counter, 0);
+            strictEqual(queue.length, 2);
+            strictEqual(result.queue.length, 2);
+            strictEqual(counter, 0);
 
-			result.push(fncIncrement);
-			
-			strictEqual(queue.length, 2);
-			strictEqual(result.queue.length, 2);
-			strictEqual(counter, 0);
+            result.join();
 
-			result.join();
-			
-			strictEqual(queue.length, 2);
-			strictEqual(result.queue.length, 0);
-			strictEqual(counter, 2);
+            strictEqual(queue.length, 2);
+            strictEqual(result.queue.length, 0);
+            strictEqual(counter, 2);
 
-			queue.push(fncIncrement);
-			
-			strictEqual(queue.length, 3);
-			strictEqual(result.queue.length, 0);
-			strictEqual(counter, 2);
+            queue.push(fncIncrement);
 
-			result.push(fncIncrement);
-			
-			strictEqual(queue.length, 3);
-			strictEqual(result.queue.length, 0);
-			strictEqual(counter, 3);
-		});
+            strictEqual(queue.length, 3);
+            strictEqual(result.queue.length, 0);
+            strictEqual(counter, 2);
 
-	} ());
+            result.push(fncIncrement);
 
-	(function ()
-	{
-		module("Error handling");
+            strictEqual(queue.length, 3);
+            strictEqual(result.queue.length, 0);
+            strictEqual(counter, 3);
+        });
+    }());
 
-		test("Can ignore function errors", 10, function ()
-		{
-			var counter = 0;
+    (function()
+    {
+        module("Error handling");
 
-			function fncIncrement()
-			{
-				counter += 1;
-			}
+        test("Can ignore function errors", 10, function()
+        {
+            function fncIncrement()
+            {
+                counter += 1;
+            }
 
-			function fncError()
-			{
-				throw new Error("fncError");
-			}
+            function fncError()
+            {
+                throw new Error("fncError");
+            }
 
-			var queue = [];
+            var counter = 0,
+                queue = null,
+                result = null;
 
-			queue.push(fncIncrement);
-			queue.push(fncError);
-			queue.push(fncIncrement);
+            queue = [];
 
-			strictEqual(queue.length, 3);
-			strictEqual(counter, 0);
+            queue.push(fncIncrement);
+            queue.push(fncError);
+            queue.push(fncIncrement);
 
-			var result = new JoelPurra.CollectCalls(queue);
+            strictEqual(queue.length, 3);
+            strictEqual(counter, 0);
 
-			strictEqual(result.queue.length, 3);
-			strictEqual(counter, 0);
+            result = new JoelPurra.CollectCalls(queue);
 
-			result.push(fncIncrement);
-			result.push(fncError);
-			result.push(fncIncrement);
+            strictEqual(result.queue.length, 3);
+            strictEqual(counter, 0);
 
-			strictEqual(result.queue.length, 6);
-			strictEqual(counter, 0);
+            result.push(fncIncrement);
+            result.push(fncError);
+            result.push(fncIncrement);
 
-			result.join();
+            strictEqual(result.queue.length, 6);
+            strictEqual(counter, 0);
 
-			strictEqual(result.queue.length, 0);
-			strictEqual(counter, 4);
+            result.join();
 
-			result.push(fncIncrement);
-			result.push(fncError);
-			result.push(fncIncrement);
+            strictEqual(result.queue.length, 0);
+            strictEqual(counter, 4);
 
-			strictEqual(result.queue.length, 0);
-			strictEqual(counter, 6);
-		});
+            result.push(fncIncrement);
+            result.push(fncError);
+            result.push(fncIncrement);
 
-		test("Can add non-functions", 10, function ()
-		{
-			var counter = 0;
+            strictEqual(result.queue.length, 0);
+            strictEqual(counter, 6);
+        });
 
-			function fncIncrement()
-			{
-				counter += 1;
-			}
+        test("Can add non-functions", 10, function()
+        {
+            function fncIncrement()
+            {
+                counter += 1;
+            }
 
-			var notAFunction = 123456;
+            var counter = 0,
+                queue = null,
+                result = null,
+                notAFunction = 123456;
 
-			var queue = [];
+            queue = [];
 
-			queue.push(fncIncrement);
-			queue.push(notAFunction);
-			queue.push(fncIncrement);
+            queue.push(fncIncrement);
+            queue.push(notAFunction);
+            queue.push(fncIncrement);
 
-			strictEqual(queue.length, 3);
-			strictEqual(counter, 0);
+            strictEqual(queue.length, 3);
+            strictEqual(counter, 0);
 
-			var result = new JoelPurra.CollectCalls(queue);
+            result = new JoelPurra.CollectCalls(queue);
 
-			strictEqual(result.queue.length, 3);
-			strictEqual(counter, 0);
+            strictEqual(result.queue.length, 3);
+            strictEqual(counter, 0);
 
-			result.push(fncIncrement);
-			result.push(notAFunction);
-			result.push(fncIncrement);
+            result.push(fncIncrement);
+            result.push(notAFunction);
+            result.push(fncIncrement);
 
-			strictEqual(result.queue.length, 6);
-			strictEqual(counter, 0);
+            strictEqual(result.queue.length, 6);
+            strictEqual(counter, 0);
 
-			result.join();
+            result.join();
 
-			strictEqual(result.queue.length, 0);
-			strictEqual(counter, 4);
+            strictEqual(result.queue.length, 0);
+            strictEqual(counter, 4);
 
-			result.push(fncIncrement);
-			result.push(notAFunction);
-			result.push(fncIncrement);
+            result.push(fncIncrement);
+            result.push(notAFunction);
+            result.push(fncIncrement);
 
-			strictEqual(result.queue.length, 0);
-			strictEqual(counter, 6);
-		});
-	} ());
-} ());
+            strictEqual(result.queue.length, 0);
+            strictEqual(counter, 6);
+        });
+    }());
+}());

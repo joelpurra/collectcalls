@@ -11,56 +11,55 @@
 // Set up namespace, if needed
 var JoelPurra = JoelPurra || {};
 
-(function (namespace)
+(function(namespace)
 {
-	"use strict";
+    "use strict";
 
-	// Public CollectCalls functions
-	namespace.CollectCalls = function (queue, ready)
-	{
-		this.queue = (queue !== undefined ? queue.concat() : []);
-		this.ready = (ready === true);
-		this.handleQueue();
+    // Public CollectCalls functions
+    namespace.CollectCalls = function(queue, ready)
+    {
+        this.queue = (queue !== undefined ? queue.concat() : []);
+        this.ready = (ready === true);
+        this.handleQueue();
 
-		return this;
-	};
+        return this;
+    };
 
-	namespace.CollectCalls.prototype.join = function ()
-	{
-		this.ready = true;
-		this.handleQueue();
-	};
+    namespace.CollectCalls.prototype.join = function()
+    {
+        this.ready = true;
+        this.handleQueue();
+    };
 
-	namespace.CollectCalls.prototype.push = function (fnc)
-	{
-		this.queue.push(fnc);
-		this.handleQueue();
-	};
+    namespace.CollectCalls.prototype.push = function(fnc)
+    {
+        this.queue.push(fnc);
+        this.handleQueue();
+    };
 
-	// Private CollectCalls methods
-	namespace.CollectCalls.prototype.handleOne = function (fnc)
-	{
-		try
-		{
-			fnc.call(null);
-		}
-		catch (handleOneError)
-		{
-			// TODO: don't hide errors
-		}
-	};
+    // Private CollectCalls methods
+    namespace.CollectCalls.prototype.handleOne = function(fnc)
+    {
+        try
+        {
+            fnc(null);
+        }
+        catch (handleOneError)
+        {
+            // TODO: don't hide errors
+        }
+    };
 
-	namespace.CollectCalls.prototype.handleQueue = function ()
-	{
-		if (this.ready)
-		{
-			while (this.queue.length)
-			{
-				var fnc = this.queue.shift();
+    namespace.CollectCalls.prototype.handleQueue = function()
+    {
+        if (this.ready)
+        {
+            while (this.queue.length)
+            {
+                var fnc = this.queue.shift();
 
-				this.handleOne(fnc);
-			}
-		}
-	};
-
-} (JoelPurra));
+                this.handleOne(fnc);
+            }
+        }
+    };
+}(JoelPurra));
