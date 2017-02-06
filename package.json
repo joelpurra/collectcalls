@@ -1,0 +1,21 @@
+{
+  "name": "collectcalls",
+  "title": "CollectCalls",
+  "version": "1.0.0",
+  "description": "Collects function () { } blocks that should be called in the future. The script collectcalls.joelpurra.js does not need to load until the future is nigh.",
+  "homepage": "https://joelpurra.com/projects/collectcalls/",
+  "bugs": {
+    "url": "https://github.com/joelpurra/collectcalls/issues"
+  },
+  "author": "Joel Purra <code@joelpurra.com> (https://joelpurra.com/)",
+  "main": "src/collectcalls.joelpurra.js",
+  "scripts": {},
+  "license": "BSD-2-Clause OR MIT OR GPL-3.0",
+  "dependencies": {},
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joelpurra/collectcalls.git"
+  },
+  "keywords": []
+}
