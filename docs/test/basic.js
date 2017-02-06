@@ -1,8 +1,7 @@
-/// <reference path="qunit/qunit/qunit.js" />
-/// <reference path="../src/collectcalls.joelpurra.js" />
-
-/*jslint vars: true, white: true, maxlen: 120*/
-/*global JoelPurra, module, test, ok, strictEqual, notStrictEqual*/
+/* global
+JoelPurra:false,
+QUnit:false,
+*/
 
 (function()
 {
@@ -10,42 +9,50 @@
 
     (function()
     {
-        module("Class");
+        QUnit.module("Class");
 
-        test("Class exists", 4, function()
+        QUnit.test("Class exists", function(assert)
         {
-            notStrictEqual(typeof (JoelPurra.CollectCalls), "undefined", "Is undefined.");
-            strictEqual(typeof (JoelPurra.CollectCalls), "function", "Not a function.");
-            strictEqual(typeof (new JoelPurra.CollectCalls()), "object", "Not an object.");
-            ok((new JoelPurra.CollectCalls()) instanceof (JoelPurra.CollectCalls), "Not an instance of itself.");
+            assert.expect(4);
+
+            assert.notStrictEqual(typeof (JoelPurra.CollectCalls), "undefined", "Is undefined.");
+            assert.strictEqual(typeof (JoelPurra.CollectCalls), "function", "Not a function.");
+            assert.strictEqual(typeof (new JoelPurra.CollectCalls()), "object", "Not an object.");
+            assert.ok((new JoelPurra.CollectCalls()) instanceof (JoelPurra.CollectCalls), "Not an instance of itself.");
         });
     }());
 
     (function()
     {
-        module("Constructor");
+        QUnit.module("Constructor");
 
-        test("Constructor accepts zero arguments", 1, function()
+        QUnit.test("Constructor accepts zero arguments", function(assert)
         {
+            assert.expect(1);
+
             var result = new JoelPurra.CollectCalls();
 
-            strictEqual(result.queue.length, 0);
+            assert.strictEqual(result.queue.length, 0);
 
             result.join();
         });
 
-        test("Constructor accepts empty queue", 1, function()
+        QUnit.test("Constructor accepts empty queue", function(assert)
         {
+            assert.expect(1);
+
             var queue = [],
                 result = new JoelPurra.CollectCalls(queue);
 
-            strictEqual(result.queue.length, 0);
+            assert.strictEqual(result.queue.length, 0);
 
             result.join();
         });
 
-        test("Constructor accepts two arguments and does not start", 5, function()
+        QUnit.test("Constructor accepts two arguments and does not start", function(assert)
         {
+            assert.expect(5);
+
             function fncChange()
             {
                 change = "has changed";
@@ -59,21 +66,23 @@
 
             queue.push(fncChange);
 
-            strictEqual(queue.length, 1);
+            assert.strictEqual(queue.length, 1);
 
             result = new JoelPurra.CollectCalls(queue, false);
 
-            strictEqual(result.queue.length, 1);
-            strictEqual(change, "has not changed");
+            assert.strictEqual(result.queue.length, 1);
+            assert.strictEqual(change, "has not changed");
 
             result.join();
 
-            strictEqual(result.queue.length, 0);
-            strictEqual(change, "has changed");
+            assert.strictEqual(result.queue.length, 0);
+            assert.strictEqual(change, "has changed");
         });
 
-        test("Constructor accepts two arguments and starts", 5, function()
+        QUnit.test("Constructor accepts two arguments and starts", function(assert)
         {
+            assert.expect(5);
+
             function fncChange()
             {
                 change = "has changed";
@@ -87,26 +96,28 @@
 
             queue.push(fncChange);
 
-            strictEqual(queue.length, 1);
+            assert.strictEqual(queue.length, 1);
 
             result = new JoelPurra.CollectCalls(queue, true);
 
-            strictEqual(result.queue.length, 0);
-            strictEqual(change, "has changed");
+            assert.strictEqual(result.queue.length, 0);
+            assert.strictEqual(change, "has changed");
 
             result.join();
 
-            strictEqual(result.queue.length, 0);
-            strictEqual(change, "has changed");
+            assert.strictEqual(result.queue.length, 0);
+            assert.strictEqual(change, "has changed");
         });
     }());
 
     (function()
     {
-        module("Queue");
+        QUnit.module("Queue");
 
-        test("Can run one function twice", 6, function()
+        QUnit.test("Can run one function twice", function(assert)
         {
+            assert.expect(6);
+
             function fncIncrement()
             {
                 counter += 1;
@@ -121,22 +132,24 @@
             queue.push(fncIncrement);
             queue.push(fncIncrement);
 
-            strictEqual(queue.length, 2);
-            strictEqual(counter, 0);
+            assert.strictEqual(queue.length, 2);
+            assert.strictEqual(counter, 0);
 
             result = new JoelPurra.CollectCalls(queue);
 
-            strictEqual(result.queue.length, 2);
-            strictEqual(counter, 0);
+            assert.strictEqual(result.queue.length, 2);
+            assert.strictEqual(counter, 0);
 
             result.join();
 
-            strictEqual(result.queue.length, 0);
-            strictEqual(counter, 2);
+            assert.strictEqual(result.queue.length, 0);
+            assert.strictEqual(counter, 2);
         });
 
-        test("Can run one function twice, before and after constructor", 8, function()
+        QUnit.test("Can run one function twice, before and after constructor", function(assert)
         {
+            assert.expect(8);
+
             function fncIncrement()
             {
                 counter += 1;
@@ -150,27 +163,29 @@
 
             queue.push(fncIncrement);
 
-            strictEqual(queue.length, 1);
-            strictEqual(counter, 0);
+            assert.strictEqual(queue.length, 1);
+            assert.strictEqual(counter, 0);
 
             result = new JoelPurra.CollectCalls(queue);
 
-            strictEqual(result.queue.length, 1);
-            strictEqual(counter, 0);
+            assert.strictEqual(result.queue.length, 1);
+            assert.strictEqual(counter, 0);
 
             result.push(fncIncrement);
 
-            strictEqual(result.queue.length, 2);
-            strictEqual(counter, 0);
+            assert.strictEqual(result.queue.length, 2);
+            assert.strictEqual(counter, 0);
 
             result.join();
 
-            strictEqual(result.queue.length, 0);
-            strictEqual(counter, 2);
+            assert.strictEqual(result.queue.length, 0);
+            assert.strictEqual(counter, 2);
         });
 
-        test("Can run one function thrice, before and after constructor and after join", 10, function()
+        QUnit.test("Can run one function thrice, before and after constructor and after join", function(assert)
         {
+            assert.expect(10);
+
             function fncIncrement()
             {
                 counter += 1;
@@ -184,32 +199,34 @@
 
             queue.push(fncIncrement);
 
-            strictEqual(queue.length, 1);
-            strictEqual(counter, 0);
+            assert.strictEqual(queue.length, 1);
+            assert.strictEqual(counter, 0);
 
             result = new JoelPurra.CollectCalls(queue);
 
-            strictEqual(result.queue.length, 1);
-            strictEqual(counter, 0);
+            assert.strictEqual(result.queue.length, 1);
+            assert.strictEqual(counter, 0);
 
             result.push(fncIncrement);
 
-            strictEqual(result.queue.length, 2);
-            strictEqual(counter, 0);
+            assert.strictEqual(result.queue.length, 2);
+            assert.strictEqual(counter, 0);
 
             result.join();
 
-            strictEqual(result.queue.length, 0);
-            strictEqual(counter, 2);
+            assert.strictEqual(result.queue.length, 0);
+            assert.strictEqual(counter, 2);
 
             result.push(fncIncrement);
 
-            strictEqual(result.queue.length, 0);
-            strictEqual(counter, 3);
+            assert.strictEqual(result.queue.length, 0);
+            assert.strictEqual(counter, 3);
         });
 
-        test("Constructor copies original queue", 20, function()
+        QUnit.test("Constructor copies original queue", function(assert)
         {
+            assert.expect(20);
+
             function fncIncrement()
             {
                 counter += 1;
@@ -223,53 +240,55 @@
 
             queue.push(fncIncrement);
 
-            strictEqual(queue.length, 1);
-            strictEqual(counter, 0);
+            assert.strictEqual(queue.length, 1);
+            assert.strictEqual(counter, 0);
 
             result = new JoelPurra.CollectCalls(queue);
 
-            strictEqual(queue.length, 1);
-            strictEqual(result.queue.length, 1);
-            strictEqual(counter, 0);
+            assert.strictEqual(queue.length, 1);
+            assert.strictEqual(result.queue.length, 1);
+            assert.strictEqual(counter, 0);
 
             queue.push(fncIncrement);
 
-            strictEqual(queue.length, 2);
-            strictEqual(result.queue.length, 1);
-            strictEqual(counter, 0);
+            assert.strictEqual(queue.length, 2);
+            assert.strictEqual(result.queue.length, 1);
+            assert.strictEqual(counter, 0);
 
             result.push(fncIncrement);
 
-            strictEqual(queue.length, 2);
-            strictEqual(result.queue.length, 2);
-            strictEqual(counter, 0);
+            assert.strictEqual(queue.length, 2);
+            assert.strictEqual(result.queue.length, 2);
+            assert.strictEqual(counter, 0);
 
             result.join();
 
-            strictEqual(queue.length, 2);
-            strictEqual(result.queue.length, 0);
-            strictEqual(counter, 2);
+            assert.strictEqual(queue.length, 2);
+            assert.strictEqual(result.queue.length, 0);
+            assert.strictEqual(counter, 2);
 
             queue.push(fncIncrement);
 
-            strictEqual(queue.length, 3);
-            strictEqual(result.queue.length, 0);
-            strictEqual(counter, 2);
+            assert.strictEqual(queue.length, 3);
+            assert.strictEqual(result.queue.length, 0);
+            assert.strictEqual(counter, 2);
 
             result.push(fncIncrement);
 
-            strictEqual(queue.length, 3);
-            strictEqual(result.queue.length, 0);
-            strictEqual(counter, 3);
+            assert.strictEqual(queue.length, 3);
+            assert.strictEqual(result.queue.length, 0);
+            assert.strictEqual(counter, 3);
         });
     }());
 
     (function()
     {
-        module("Error handling");
+        QUnit.module("Error handling");
 
-        test("Can ignore function errors", 10, function()
+        QUnit.test("Can ignore function errors", function(assert)
         {
+            assert.expect(10);
+
             function fncIncrement()
             {
                 counter += 1;
@@ -290,36 +309,38 @@
             queue.push(fncError);
             queue.push(fncIncrement);
 
-            strictEqual(queue.length, 3);
-            strictEqual(counter, 0);
+            assert.strictEqual(queue.length, 3);
+            assert.strictEqual(counter, 0);
 
             result = new JoelPurra.CollectCalls(queue);
 
-            strictEqual(result.queue.length, 3);
-            strictEqual(counter, 0);
+            assert.strictEqual(result.queue.length, 3);
+            assert.strictEqual(counter, 0);
 
             result.push(fncIncrement);
             result.push(fncError);
             result.push(fncIncrement);
 
-            strictEqual(result.queue.length, 6);
-            strictEqual(counter, 0);
+            assert.strictEqual(result.queue.length, 6);
+            assert.strictEqual(counter, 0);
 
             result.join();
 
-            strictEqual(result.queue.length, 0);
-            strictEqual(counter, 4);
+            assert.strictEqual(result.queue.length, 0);
+            assert.strictEqual(counter, 4);
 
             result.push(fncIncrement);
             result.push(fncError);
             result.push(fncIncrement);
 
-            strictEqual(result.queue.length, 0);
-            strictEqual(counter, 6);
+            assert.strictEqual(result.queue.length, 0);
+            assert.strictEqual(counter, 6);
         });
 
-        test("Can add non-functions", 10, function()
+        QUnit.test("Can add non-functions", function(assert)
         {
+            assert.expect(10);
+
             function fncIncrement()
             {
                 counter += 1;
@@ -336,32 +357,32 @@
             queue.push(notAFunction);
             queue.push(fncIncrement);
 
-            strictEqual(queue.length, 3);
-            strictEqual(counter, 0);
+            assert.strictEqual(queue.length, 3);
+            assert.strictEqual(counter, 0);
 
             result = new JoelPurra.CollectCalls(queue);
 
-            strictEqual(result.queue.length, 3);
-            strictEqual(counter, 0);
+            assert.strictEqual(result.queue.length, 3);
+            assert.strictEqual(counter, 0);
 
             result.push(fncIncrement);
             result.push(notAFunction);
             result.push(fncIncrement);
 
-            strictEqual(result.queue.length, 6);
-            strictEqual(counter, 0);
+            assert.strictEqual(result.queue.length, 6);
+            assert.strictEqual(counter, 0);
 
             result.join();
 
-            strictEqual(result.queue.length, 0);
-            strictEqual(counter, 4);
+            assert.strictEqual(result.queue.length, 0);
+            assert.strictEqual(counter, 4);
 
             result.push(fncIncrement);
             result.push(notAFunction);
             result.push(fncIncrement);
 
-            strictEqual(result.queue.length, 0);
-            strictEqual(counter, 6);
+            assert.strictEqual(result.queue.length, 0);
+            assert.strictEqual(counter, 6);
         });
     }());
 }());
