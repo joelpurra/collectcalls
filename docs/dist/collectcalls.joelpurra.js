@@ -1,6 +1,6 @@
 /*!
  * @license CollectCalls
- * Copyright (c) 2010, 2011, 2012, Joel Purra <http://joelpurra.se/>
+ * Copyright (c) 2010, 2011, 2012, Joel Purra <https://joelpurra.com/>
  * Released under BSD, MIT and GPL, see LICENSES.
  *
  * Collects functions that should be called in the future.

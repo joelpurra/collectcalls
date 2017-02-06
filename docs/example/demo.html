@@ -12,8 +12,8 @@ title: demo
 </p>
 <p>
 	In case you wonder why jQuery and CollectCalls are not loaded at the top of the
-	page, it is because it is <a href="http://code.google.com/speed/page-speed/docs/payload.html#DeferLoadingJS">
-		best practice to load scripts at the bottom of the page</a>, near <code>&lt;/body&gt;</code>.
+	page, it is because it is <a href="https://developers.google.com/speed/docs/insights/BlockingJS">
+		best practice to load scripts asynchronously and deferred at the bottom of the page</a>, near <code>&lt;/body&gt;</code>.
 	There are also other techniques/optimizations/combinations that make it hard to
 	predict exactly when a script has loaded and executed, but CollectCalls can help
 	manage all of them.
@@ -27,7 +27,7 @@ title: demo
 		CollectCalls.</a></li>
 	<li><a href="demo.html?show-alert=non-blocking">Reload and show non-blocking alert box
 		using CollectCalls.</a></li>
-	<li><a href="demo.html?show-alert=blocking&show-alert=non-blocking">Reload and show
+	<li><a href="demo.html?show-alert=blocking&amp;show-alert=non-blocking">Reload and show
 		both blocking and non-blocking alert box.</a></li>
 </ol>
 <h2>
