@@ -1,5 +1,12 @@
 # [CollectCalls](https://joelpurra.com/projects/collectcalls/) javascript library.
 
+<p class="donate">
+  <a href="https://joelpurra.com/donate/proceed/?amount=5&currency=usd"><kbd>Donate $5 now</kbd></a>
+  <a href="https://joelpurra.com/donate/proceed/?amount=25&currency=usd"><kbd>Donate $25 now</kbd></a>
+  <a href="https://joelpurra.com/donate/proceed/?amount=100&currency=usd&invoice=true"><kbd>Donate $100 now</kbd></a>
+  <a href="https://joelpurra.com/donate/"><kbd>More options</kbd></a>
+</p>
+
 Collects `function () { }` blocks that should be called in the future. The script `collectcalls.joelpurra.js` does not need to load until the future is nigh.
 
 While executing an inline script, it might have pending dependencies that prevents it from completing right away. CollectCalls can collect functions and call them at a later time, when the time is right.
@@ -130,4 +137,4 @@ Should be compatible with all javascript-enabled browsers. You are encouraged to
 ---
 
 [CollectCalls](https://joelpurra.com/projects/collectcalls/) copyright &copy; 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, [Joel Purra](https://joelpurra.com/). All rights reserved. When using CollectCalls, comply to at least one of the three available licenses: BSD, MIT, GPL.
-Please see the LICENSE file for details.
+Please see the LICENSE file for details. [Your donations are appreciated!](https://joelpurra.com/donate/)
