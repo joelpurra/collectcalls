@@ -9,6 +9,14 @@
 
 Collects `function () { }` blocks that should be called in the future. The script `collectcalls.joelpurra.js` does not need to load until the future is nigh.
 
+
+
+> ## ⚠️ This project has been archived
+>
+> No future updates are planned. Feel free to continue using it, but expect no support.
+
+
+
 While executing an inline script, it might have pending dependencies that prevents it from completing right away. CollectCalls can collect functions and call them at a later time, when the time is right.
 
 - [Project page](https://joelpurra.com/projects/collectcalls/)
